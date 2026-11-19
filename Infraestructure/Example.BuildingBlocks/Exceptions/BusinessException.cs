@@ -1,39 +1,28 @@
 ﻿using System;
-using System.Linq;
+using System.Net;
 
 namespace Example.BuildingBlocks.Exceptions
 {
     public class BusinessException : Exception
     {
-        public int Status { get; set; }
-        public string Mensaje { get; set; }
-
-        public BusinessException()
-            : base() { }
+        public int Status { get; }
 
         public BusinessException(string message)
             : base(message) { }
 
-        public BusinessException(string format, params object[] args)
-            : base(string.Format(format, args))
+        public BusinessException(string message, HttpStatusCode statusCode)
+            : base(message)
         {
-            Mensaje = format;
-            var dato = args.ToList().FirstOrDefault();
-            if (dato != null)
-                Status = (int)dato;
+            Status = (int)statusCode;
         }
 
-        public BusinessException(string format, int statusCode)
-            : base(format)
+        public BusinessException(string message, int statusCode)
+            : base(message)
         {
-            Mensaje = format;
             Status = statusCode;
         }
 
         public BusinessException(string message, Exception innerException)
             : base(message, innerException) { }
-
-        public BusinessException(string format, Exception innerException, params object[] args)
-            : base(string.Format(format, args), innerException) { }
     }
 }

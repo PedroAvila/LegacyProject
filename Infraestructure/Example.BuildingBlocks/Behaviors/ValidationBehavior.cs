@@ -32,7 +32,6 @@ namespace Example.BuildingBlocks.Behaviors
 
                 var failures = validationResults
                     .SelectMany(result => result.Errors)
-                    .Where(failure => failure != null)
                     .ToList();
 
                 if (failures.Count > 0)

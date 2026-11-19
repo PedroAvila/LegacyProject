@@ -1,90 +1,20 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{39027CBB-815D-4CD2-B349-B0DD83434F16}</ProjectGuid>
+    <TargetFramework>net10.0</TargetFramework>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Example.UseCase</RootNamespace>
-    <AssemblyName>Example.UseCase</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <Deterministic>true</Deterministic>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <AssemblyTitle>Example.UseCase</AssemblyTitle>
+    <Product>Example.UseCase</Product>
+    <Copyright>Copyright ©  2026</Copyright>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FluentValidation">
-      <HintPath>..\packages\FluentValidation.11.12.0\lib\netstandard2.0\FluentValidation.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.6.0.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.Abstractions.6.0.0\lib\net461\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
-    </Reference>
-    <Reference Include="PAN.Mediator, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\PAN.Mediator.2.0.0\lib\netstandard2.0\PAN.Mediator.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.3\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
+    <ProjectReference Include="..\Example.Dtos\Example.Dtos.csproj" />
+    <ProjectReference Include="..\Example.Entities\Example.Entities.csproj" />
+    <ProjectReference Include="..\Example.Ports\Example.Ports.csproj" />
+    <ProjectReference Include="..\Infraestructure\Example.BuildingBlocks\Example.BuildingBlocks.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Features\Customers\CreateCustomerUseCaseHandler.cs" />
-    <Compile Include="Features\Customers\GetCustomerUseCaseHandler.cs" />
-    <Compile Include="Features\Customers\SingleCustomerUseCaseHandler.cs" />
-    <Compile Include="Features\Customers\UpdateCustomerUseCaseHandler.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
+    <PackageReference Include="FluentValidation" Version="12.2.0" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Example.Dtos\Example.Dtos.csproj">
-      <Project>{8619B0AB-CA19-40CE-A017-4627DF996A47}</Project>
-      <Name>Example.Dtos</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Example.Entities\Example.Entities.csproj">
-      <Project>{34366ff2-13ba-4237-9814-839f8d03f249}</Project>
-      <Name>Example.Entities</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Example.Ports\Example.Ports.csproj">
-      <Project>{CC14BB0F-003C-47A3-9F42-05A382D369BA}</Project>
-      <Name>Example.Ports</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Infraestructure\Example.BuildingBlocks\Example.BuildingBlocks.csproj">
-      <Project>{55429355-82F0-4449-BE2A-A78E01387477}</Project>
-      <Name>Example.BuildingBlocks</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

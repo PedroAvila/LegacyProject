@@ -1,98 +1,69 @@
 ﻿using FluentValidation;
+using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Web.Http.ExceptionHandling;
-using System.Web.Http.Results;
 
 namespace Example.BuildingBlocks.Exceptions.Handler
 {
-    /// <summary>
-    /// Handler global de excepciones de ASP.NET Web API 2. Traduce ValidationException
-    /// y BusinessException a una respuesta ProblemDetails, y oculta el detalle de
-    /// cualquier error inesperado.
-    /// </summary>
-    public sealed class CustomExceptionHandler : IExceptionHandler
+    public class CustomExceptionHandler(ILogger<CustomExceptionHandler> logger) : IExceptionHandler
     {
-        private readonly ILogger<CustomExceptionHandler> _logger;
 
-        public CustomExceptionHandler(ILogger<CustomExceptionHandler> logger)
+        public async ValueTask<bool> TryHandleAsync(
+            HttpContext context,
+            Exception exception,
+            CancellationToken cancellationToken)
         {
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        }
-
-        public Task HandleAsync(ExceptionHandlerContext context, CancellationToken cancellationToken)
-        {
-            var request = context.Request;
-            var exception = context.Exception;
-            var correlationId = request.GetCorrelationId();
-
-            _logger.LogError(
+            logger.LogError(
                 exception,
                 "Error Message: {exceptionMessage}, Time of occurrence {time}, Request {method} {path}, TraceId {traceId}",
                 exception.Message,
                 DateTime.UtcNow,
-                request.Method,
-                request.RequestUri?.AbsolutePath,
-                correlationId);
+                context.Request.Method,
+                context.Request.Path,
+                context.TraceIdentifier);
 
-            var validationException = exception as ValidationException;
-            var businessException = exception as BusinessException;
+            (string Detail, string Title, int StatusCode) = exception switch
+            {
+                ValidationException => (
+                    exception.Message,
+                    exception.GetType().Name,
+                    StatusCodes.Status400BadRequest
+                ),
+                BusinessException customException => (
+                    customException.Message,
+                    "Error de negocio",
+                    (int)customException.Status
+                ),
+                _ => (
+                    "Ocurrió un error inesperado en nuestro sistema. Por favor, intente más tarde.",
+                    "Internal Server Error",
+                    StatusCodes.Status500InternalServerError
+                ),
+            };
 
-            string title;
-            string detail;
-            HttpStatusCode statusCode;
-
-            if (validationException != null)
-            {
-                title = validationException.GetType().Name;
-                detail = validationException.Message;
-                statusCode = HttpStatusCode.BadRequest;
-            }
-            else if (businessException != null)
-            {
-                title = "Error de negocio";
-                detail = businessException.Message;
-                // BusinessException deja Status en 0 cuando se usa el constructor simple.
-                statusCode = businessException.Status > 0
-                    ? (HttpStatusCode)businessException.Status
-                    : HttpStatusCode.BadRequest;
-            }
-            else
-            {
-                title = "Internal Server Error";
-                detail = "Ocurrió un error inesperado en nuestro sistema. Por favor, intente más tarde.";
-                statusCode = HttpStatusCode.InternalServerError;
-            }
+            context.Response.StatusCode = StatusCode;
 
             var problemDetails = new ProblemDetails
             {
-                Title = title,
-                Detail = detail,
-                Status = (int)statusCode,
-                Instance = request.RequestUri?.AbsolutePath,
-                TraceId = correlationId.ToString()
+                Title = Title,
+                Detail = Detail,
+                Status = StatusCode,
+                Instance = context.Request.Path,
             };
 
-            if (validationException != null)
-            {
-                problemDetails.ValidationErrors = validationException.Errors
-                    .Select(failure => (object)new
-                    {
-                        failure.PropertyName,
-                        failure.ErrorMessage
-                    })
-                    .ToList();
-            }
+            problemDetails.Extensions.Add("traceId", context.TraceIdentifier);
+            if (exception is ValidationException validationException)
+                problemDetails.Extensions.Add("ValidationErrors", validationException.Errors);
 
-            context.Result = new ResponseMessageResult(
-                request.CreateResponse(statusCode, problemDetails));
-
-            return Task.CompletedTask;
+            await context.Response.WriteAsJsonAsync(
+                problemDetails,
+                cancellationToken: cancellationToken
+            );
+            return true;
         }
     }
 }

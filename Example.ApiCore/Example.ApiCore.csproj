@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>642ad4e7-3a0c-4f44-83bf-dc6861ae5e89</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.2.0" />
+    <PackageReference Include="PAN.Mediator" Version="2.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="11.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Example.Adapters\Example.Adapters.csproj" />
+    <ProjectReference Include="..\Example.Dtos\Example.Dtos.csproj" />
+    <ProjectReference Include="..\Example.Ports\Example.Ports.csproj" />
+    <ProjectReference Include="..\Example.UseCase\Example.UseCase.csproj" />
+    <ProjectReference Include="..\Infraestructure\Example.BuildingBlocks\Example.BuildingBlocks.csproj" />
+  </ItemGroup>
+
+</Project>

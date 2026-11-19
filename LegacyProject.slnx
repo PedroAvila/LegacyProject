@@ -1,5 +1,4 @@
 <Solution>
-  <Folder Name="/Layers/" />
   <Folder Name="/Layers/Application/">
     <Project Path="Example.Dtos/Example.Dtos.csproj" Id="8619b0ab-ca19-40ce-a017-4627df996a47" />
     <Project Path="Example.UseCase/Example.UseCase.csproj" Id="39027cbb-815d-4cd2-b349-b0dd83434f16" />
@@ -10,7 +9,7 @@
   </Folder>
   <Folder Name="/Layers/Infraestructure/">
     <Project Path="Example.Adapters/Example.Adapters.csproj" Id="7f7d30dc-e954-449d-9c39-9668d02c2637" />
-    <Project Path="Example.Api/Example.Api.csproj" Id="e7b5baed-30d5-4862-b36d-07482b0f15d9" />
     <Project Path="Infraestructure/Example.BuildingBlocks/Example.BuildingBlocks.csproj" Id="55429355-82f0-4449-be2a-a78e01387477" />
   </Folder>
+  <Project Path="Example.ApiCore/Example.ApiCore.csproj" />
 </Solution>

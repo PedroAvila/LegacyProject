@@ -1,12 +1,12 @@
-﻿using PAN.Mediator.Abstractions;
-using System.Threading.Tasks;
-using System.Web.Http;
+﻿using Microsoft.AspNetCore.Mvc;
+using PAN.Mediator.Abstractions;
 using static Example.Dtos.CustomerDto;
 
-namespace Example.Api.Controllers
+namespace Example.ApiCore.Controllers
 {
-    [RoutePrefix("api/Customer")]
-    public class CustomerController : ApiController
+    [ApiController]
+    [Route("api/Customer")]
+    public class CustomerController : ControllerBase
     {
         private readonly IPanMediator _mediator;
 
@@ -16,16 +16,15 @@ namespace Example.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IHttpActionResult> Get()
+        public async Task<IActionResult> Get()
         {
             var query = new GetCustomerQuery();
             var result = await _mediator.Send(query);
             return Ok(result);
         }
 
-        [HttpGet]
-        [Route("{id:int}")]
-        public async Task<IHttpActionResult> Single(int id)
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> Single(int id)
         {
             var query = new SingleCustomerQuery(id);
             var result = await _mediator.Send(query);
@@ -33,15 +32,14 @@ namespace Example.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IHttpActionResult> Create([FromBody] CreateCustomerCommand dto)
+        public async Task<IActionResult> Create([FromBody] CreateCustomerCommand dto)
         {
             var result = await _mediator.Send(dto);
             return Created(string.Empty, result);
         }
 
-        [HttpPut]
-        [Route("{id:int}")]
-        public async Task<IHttpActionResult> Update(int id, [FromBody] UpdateCustomerCommand dto)
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> Update(int id, [FromBody] UpdateCustomerCommand dto)
         {
             if (dto == null)
             {
