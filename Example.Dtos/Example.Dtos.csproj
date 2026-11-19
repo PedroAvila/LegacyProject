@@ -62,5 +62,11 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Infraestructure\Example.BuildingBlocks\Example.BuildingBlocks.csproj">
+      <Project>{55429355-82F0-4449-BE2A-A78E01387477}</Project>
+      <Name>Example.BuildingBlocks</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -3,6 +3,7 @@ using Example.Entities;
 using Example.Ports;
 using PAN.DapperLambdaToSql;
 using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -51,6 +52,46 @@ namespace Example.Adapters
             {
                 await connection.OpenAsync();
                 return await connection.ExistAsync(predicate);
+            }
+        }
+
+        public async Task<IEnumerable<Customer>> GetAllAsync()
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+
+                // Dapper.Contrib resuelve la tabla (Customer -> Customers) y materializa todas las filas.
+                return await connection.GetAllAsync<Customer>();
+            }
+        }
+
+        public async Task<Customer> GetByIdAsync(int id)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+
+                // Dapper.Contrib resuelve la tabla (Customer -> Customers) y la clave [Id].
+                return await connection.GetAsync<Customer>(id);
+            }
+        }
+
+        public async Task<bool> UpdateAsync(Customer customer)
+        {
+            if (customer == null)
+            {
+                throw new ArgumentNullException(nameof(customer));
+            }
+
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+
+                // Se cualifica la llamada porque Dapper.Contrib tambien expone UpdateAsync<T>,
+                // lo que haria ambigua la invocacion como metodo de extension. La version de
+                // PAN.DapperLambdaToSql ignora las propiedades nulas (actualizacion parcial).
+                return await PAN.DapperLambdaToSql.DapperExtensions.UpdateAsync(connection, customer);
             }
         }
     }

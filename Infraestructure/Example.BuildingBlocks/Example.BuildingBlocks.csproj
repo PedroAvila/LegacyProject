@@ -74,6 +74,10 @@
   <ItemGroup>
     <Compile Include="Behaviors\LoggingBehavior.cs" />
     <Compile Include="Behaviors\ValidationBehavior.cs" />
+    <Compile Include="CQRS\ICommand.cs" />
+    <Compile Include="CQRS\ICommandHandler.cs" />
+    <Compile Include="CQRS\IQuery.cs" />
+    <Compile Include="CQRS\IQueryHandler.cs" />
     <Compile Include="Exceptions\BusinessException.cs" />
     <Compile Include="Exceptions\Handler\CustomExceptionHandler.cs" />
     <Compile Include="Exceptions\ProblemDetails.cs" />

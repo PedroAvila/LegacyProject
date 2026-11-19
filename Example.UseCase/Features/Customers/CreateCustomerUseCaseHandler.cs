@@ -1,8 +1,8 @@
-﻿using Example.BuildingBlocks.Exceptions;
+﻿using Example.BuildingBlocks.CQRS;
+using Example.BuildingBlocks.Exceptions;
 using Example.Entities;
 using Example.Ports;
 using FluentValidation;
-using PAN.Mediator.Abstractions;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -28,7 +28,7 @@ namespace Example.UseCase.Features.Customers
         }
     }
 
-    public class CreateCustomerUseCaseHandler : IPanRequestHandler<CreateCustomerCommand, CreateCustomerResult>
+    public class CreateCustomerUseCaseHandler : ICommandHandler<CreateCustomerCommand, CreateCustomerResult>
     {
         private readonly ICustomerRepository _customerRepository;
 
